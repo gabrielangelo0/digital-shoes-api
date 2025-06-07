@@ -1,34 +1,23 @@
 import { PrismaClient } from "../../generated/prisma/index.js";
 import express from "express";
-import { getAllShoes } from "../controllers/shoesControllers.js";
+import { shoesControllers } from "../controllers/shoesControllers.js";
 
 const router = express.Router();
 const prisma = new PrismaClient();
 
 // Traz todos os sapatos
-router.get("/shoes", async (req, res) => getAllShoes(req, res));
+router.get("/shoes", shoesControllers.getAllShoes);
 
 // Traz um sapato específico pelo Id
-router.get("/shoes/:id", async (req, res) => {});
+router.get("/shoes/:id", shoesControllers.getShoeById);
 
-router.post("/shoes", async (req, res) => {
-  // Create a new Shoe
+// Cria um novo sapato
+router.post("/shoes", shoesControllers.createShoe);
 
-  const { name, brand, size, color, price, photo, stock } = req.body;
+// Atualiza um sapato específico pelo Id
+router.put("/shoes/:id", shoesControllers.updateShoe);
 
-  await prisma.shoes.create({
-    data: {
-        name,
-        brand,
-        size,
-        color,
-        price,
-        photo,
-        stock
-    }
-  });
-  
-  res.status(201).json({ message: "Shoe created successfully" });
-});
+// Deleta um sapato específico pelo Id
+router.delete("/shoes/:id", shoesControllers.deleteShoe);
 
 export default router;
